@@ -1,0 +1,83 @@
+\documentclass{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{graphics,xcolor}
+\usepackage{stmaryrd,amssymb,amsmath}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{lol}[1]{colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries,title=#1,breakable}
+\usepackage{docmute}
+\usepackage{hyperref}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\ints}{\mathbb{Z}}
+\newcommand{\intersection}{\ensuremath{\cap}}
+\newcommand{\emptyword}{\ensuremath{\epsilon}}
+\newcommand{\len}[1]{\ensuremath{|#1|}}
+\newcommand{\union}{\ensuremath{\cup}}
+\newcommand{\deltahat}{\ensuremath{\widehat{\delta}}}
+
+\title{Applying Dupeire's Local Volatility Model to CVaR minimization}
+
+\author{Balaji}
+\date{}
+\institute{IISc Bangalore}
+\begin{document}
+\maketitle
+\section{The local volatility model}
+\begin{frame}{Stock Price movement}
+    \begin{lol}{Equation}
+        \begin{equation}
+            dS_t = rS_t dt + \sigma(t,S_t)S_t\tilde{dW_t}
+        \end{equation}
+    \end{lol}
+    
+    \begin{itemize}
+        \item $S_t$ is the stock price at time $t$
+        \item $r$ is the risk-free rate
+        \item $\sigma(t,S_t)$ is the volatility as a function of the time and stock price.
+        \item $\tilde{W_t}$ is the Brownian Motion under the risk-neutral measure.
+    \end{itemize}
+    
+\end{frame}
+\begin{frame}
+    \frametitle{The Dupire Equation}
+    \begin{lol}{Equation}
+        \begin{equation}
+            \frac{\partial C(T,K)}{\partial T}  + rK\frac{\partial C(T,K)}{\partial K}  = \frac{1}{2}\sigma^2(T,K)K^2\frac{\partial^2 C(T,K)}{\partial K^2}
+        \end{equation}
+    \end{lol}
+    \begin{itemize}
+        \item C is the price of the call option
+        \item T is the time to maturity
+        \item K is the strike price.
+    \end{itemize}
+    \begin{lol}{Solving For The volatility}
+        \begin{equation}
+            \sigma(T,K) = \frac{1}{K} \sqrt{\frac{2\partial C/\partial T(T,K) + 2rK\partial C(T,K)/\partial K}{\partial^2C/\partial K^2(T,K)}}
+        \end{equation}
+    \end{lol}
+\end{frame}
+\section{Building the Model(To do..)}
+\begin{frame}{Steps(Taken from the net)}
+     \begin{itemize}
+        \item Collect option prices for various strikes and maturities.
+        \item Interpolate/Extrapolate the option prices/ Black-Scholes Volatilities to get a smooth volatility surface.
+        \item Use the dupeire equation to get the volatility function.
+        \item Can calculate prices of other options using finite difference and monte-carlo simulations.
+     \end{itemize}
+\end{frame}
+\begin{frame}{Integrating into our CVaR minimization Problem(Doubtful??)}
+    \begin{itemize}
+        \item Once we have the volatility function, we can integrate it into our pricing model and get the estimated \textbf{value} of the options at maturity using simulations.
+        \item Run the fast gradient descent algorithm.
+    \end{itemize}
+\end{frame}
+\section{References}
+\begin{frame}
+    \frametitle{References:}
+    \begin{itemize}
+        \item \href{https://www.csie.ntu.edu.tw/~d00922011/python/cases/LocalVol/DUPIRE_FORMULA.PDF}{\textcolor{blue}{Online Resource}}
+        \item Shreve, Stochastic Calculus for Finance II: Continuous-Time Models
+    \end{itemize}
+\end{frame}
+\end{document}
