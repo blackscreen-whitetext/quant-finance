@@ -90,6 +90,9 @@ DATA = pd.concat(DATA,axis = 0).reset_index(drop=True)
 #print(CALL_DATA["STRIKE"][0])
 #DATA
 #print(PUT_DATA)
+def der_x(price,T,K):
+  ds = 1
+  return (price(T,K+ds)-price(T,K-ds))/(2*ds)
 def der2_x(price,T,K):
   ds = 1
   return (price(T,K+ds)-2*price(T,K)+price(T,K-ds))/(ds*ds)
@@ -109,9 +112,9 @@ def call_price(ivs):
   return lambda T,K: bsmcall(ivs(T,K),T,K) 
 def put_price(ivs):
   return lambda T,K: bsmput(ivs(T,K),T,K)
-call_iv = DATA["IV"]
-call_strike = DATA["STRIKE"]
-call_expiry = DATA["EXPIRY"]
+call_iv = CALL_DATA["IV"]
+call_strike = CALL_DATA["STRIKE"]
+call_expiry = CALL_DATA["EXPIRY"]
 call_ivs= lambda T,K: LinearNDInterpolator(list(zip(call_expiry,call_strike)), list(call_iv))(T,K)/100
 put_iv = PUT_DATA["IV"]
 put_strike = PUT_DATA["STRIKE"]
